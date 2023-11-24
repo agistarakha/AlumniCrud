@@ -1,51 +1,57 @@
 @extends('layouts.main')
-@section('content')
- <h1>Daftar Alumni</h1>
 
-    <a href="{{ route('alumni.create') }}">Tambah Alumni</a>
+@section('content')
+    <h1 class="text-4xl font-bold mb-6">Daftar Alumni</h1>
+
+    <a href="{{ route('alumni.create') }}" class="bg-blue-500 text-white px-4 py-2 rounded">Tambah Alumni</a>
 
     @if(session('success'))
-        <p style="color: green;">{{ session('success') }}</p>
+        <p class="text-green-500">{{ session('success') }}</p>
     @endif
-    <div>
-        <label for="search">Cari Nama/NIM Alumni:</label>
-        <input type="text" id='search' name="search" value="{{ request('search') }}">
+
+    <div class="mt-4">
+        <label for="search" class="block text-sm font-medium text-gray-700">Cari Nama/NIM Alumni:</label>
+        <input type="text" id="search" name="search" value="{{ request('search') }}" class="mt-1 p-2 border rounded-md">
     </div>
-    <table border="1" id="alumni-table" >
+
+    <table id="alumni-table" class="mt-4 w-full border-collapse border border-black">
         <thead>
             <tr>
-                <th>NIM</th>
-                <th>Nama</th>
-                <th>Jurusan</th>
-                <th>Tanggal Lahir</th>
-                <th>Alamat Lengkap</th>
-                <th>Pekerjaan</th>
-                <th>IPK</th>
-                <th>Aksi</th>
+                <th class="border border-black px-4 py-2">NIM</th>
+                <th class="border border-black px-4 py-2">Nama</th>
+                <th class="border border-black px-4 py-2">Jurusan</th>
+                <th class="border border-black px-4 py-2">Tanggal Lahir</th>
+                <th class="border border-black px-4 py-2">Alamat Lengkap</th>
+                <th class="border border-black px-4 py-2">Pekerjaan</th>
+                <th class="border border-black px-4 py-2">IPK</th>
+                <th class="border border-black px-4 py-2">Aksi</th>
             </tr>
         </thead>
         <tbody>
             @foreach($alumni as $alumnus)
                 <tr>
-                    <td>{{ $alumnus->nim }}</td>
-                    <td>{{ $alumnus->nama }}</td>
-                    <td>{{ $alumnus->major->jurusan }}</td>
-                    <td>{{ $alumnus->tanggal_lahir }}</td>
-                    <td>{{ $alumnus->alamat_lengkap }}</td>
-                    <td>{{ $alumnus->pekerjaan }}</td>
-                    <td>{{ $alumnus->ipk }}</td>
-                    <td>
-                        <a href="{{ route('alumni.edit', $alumnus->nim) }}">Edit</a> |
-                        <form action="{{ route('alumni.destroy', $alumnus->nim) }}" method="POST">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit">Hapus</button>
-                        </form>
-                    </td>
+                    <td class="border border-black px-4 py-2">{{ $alumnus->nim }}</td>
+                    <td class="border border-black px-4 py-2">{{ $alumnus->nama }}</td>
+                    <td class="border border-black px-4 py-2">{{ $alumnus->major->jurusan }}</td>
+                    <td class="border border-black px-4 py-2">{{ $alumnus->tanggal_lahir }}</td>
+                    <td class="border border-black px-4 py-2">{{ $alumnus->alamat_lengkap }}</td>
+                    <td class="border border-black px-4 py-2">{{ $alumnus->pekerjaan }}</td>
+                    <td class="border border-black px-4 py-2">{{ $alumnus->ipk }}</td>
+                    <td class="px-4 py-2 flex gap-1 ">
+    <a href="{{ route('alumni.edit', $alumnus->nim) }}" class="text-blue-500 px-2 py-1 border border-blue-500 rounded hover:bg-blue-500 hover:text-white">Edit</a>
+    <form action="{{ route('alumni.destroy', $alumnus->nim) }}" method="POST" class="inline">
+        @csrf
+        @method('DELETE')
+        <button type="submit" class="text-red-500 px-2 py-1 border border-red-500 rounded hover:bg-red-500 hover:text-white">Hapus</button>
+    </form>
+</td>
+
                 </tr>
             @endforeach
         </tbody>
     </table>
+
+
     <script>
         // Active search using JavaScript
         let searchTimeout;
@@ -74,26 +80,32 @@
         }
 
         function updateTable(alumni) {
-            const tableBody = document.getElementById('alumni-table').getElementsByTagName('tbody')[0];
-            tableBody.innerHTML = '';
+let rowsHTML = '';
 
-            alumni.forEach(alumnus => {
-                const row = tableBody.insertRow();
-                row.insertCell(0).innerText = alumnus.nim;
-                row.insertCell(1).innerText = alumnus.nama;
-                row.insertCell(2).innerText = alumnus.major.jurusan;
-                row.insertCell(3).innerText = alumnus.tanggal_lahir;
-                row.insertCell(4).innerText = alumnus.alamat_lengkap;
-                row.insertCell(5).innerText = alumnus.pekerjaan;
-                row.insertCell(6).innerText = alumnus.ipk;
-                row.insertCell(7).innerHTML = `
-                    <a href="{{ route('alumni.edit', '') }}/${alumnus.nim}">Edit</a> |
-                    <form action="{{ route('alumni.destroy', '') }}/${alumnus.nim}" method="POST">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit">Hapus</button>
-                    </form>`;
-            });
+alumni.forEach(alumnus => {
+    rowsHTML += `
+        <tr>
+            <td class="border border-black px-4 py-2">${alumnus.nim}</td>
+            <td class="border border-black px-4 py-2">${alumnus.nama}</td>
+            <td class="border border-black px-4 py-2">${alumnus.major.jurusan}</td>
+            <td class="border border-black px-4 py-2">${alumnus.tanggal_lahir}</td>
+            <td class="border border-black px-4 py-2">${alumnus.alamat_lengkap}</td>
+            <td class="border border-black px-4 py-2">${alumnus.pekerjaan}</td>
+            <td class="border border-black px-4 py-2">${alumnus.ipk}</td>
+            <td class="px-4 py-2 flex gap-1">
+                <a href="{{ route('alumni.edit', '') }}/${alumnus.nim}" class="text-blue-500 px-2 py-1 border border-blue-500 rounded hover:bg-blue-500 hover:text-white">Edit</a>
+                <form action="{{ route('alumni.destroy', '') }}/${alumnus.nim}" method="POST" class="inline">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="text-red-500 px-2 py-1 border border-red-500 rounded hover:bg-red-500 hover:text-white">Hapus</button>
+                </form>
+            </td>
+        </tr>`;
+});
+
+// Now you can append rowsHTML to your table body
+const tableBody = document.getElementById('alumni-table').getElementsByTagName('tbody')[0];
+tableBody.innerHTML = rowsHTML;
         }
     </script>
 @endsection
