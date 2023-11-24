@@ -14,7 +14,10 @@ class AlumnusController extends Controller
      */
     public function index()
     {
-        $alumni = Alumnus::all();
+        $search = request(['search']);
+
+
+        $alumni = Alumnus::orderBy('updated_at', 'desc')->search($search)->get();
 
         return view('pages.alumni.index', compact('alumni'));
     }

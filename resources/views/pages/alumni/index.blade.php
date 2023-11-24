@@ -7,7 +7,11 @@
     @if(session('success'))
         <p style="color: green;">{{ session('success') }}</p>
     @endif
-
+ <form action="{{ route('alumni.index') }}" method="GET">
+        <label for="search">Cari Nama/NIM Alumni:</label>
+        <input type="text" name="search" value="{{ request('search') }}">
+        <button type="submit">Cari</button>
+    </form>
     <table border="1">
         <thead>
             <tr>
