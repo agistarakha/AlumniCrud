@@ -15,9 +15,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
+Route::get('/', function () {
+    return redirect(route('alumni.index'));
+});
 
 Route::resource('majors', MajorController::class);
 Route::resource('alumni', AlumnusController::class);
