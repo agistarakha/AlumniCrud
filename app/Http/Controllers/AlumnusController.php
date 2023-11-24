@@ -6,18 +6,21 @@ use App\Models\Alumnus;
 use App\Http\Requests\StoreAlumnusRequest;
 use App\Http\Requests\UpdateAlumnusRequest;
 use App\Models\Major;
+use Illuminate\Http\Request;
 
 class AlumnusController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $search = request(['search']);
 
-
-        $alumni = Alumnus::orderBy('updated_at', 'desc')->search($search)->get();
+        $alumni = Alumnus::with('major')->orderBy('updated_at', 'desc')->search($search)->get();
+        if ($request->expectsJson()) {
+            return response()->json(['alumni' => $alumni]);
+        }
 
         return view('pages.alumni.index', compact('alumni'));
     }
