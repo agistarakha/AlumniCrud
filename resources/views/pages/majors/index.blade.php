@@ -1,9 +1,10 @@
 @extends('layouts.main')
 @section('content')
-<h1>Daftar Jurusan</h1>
+<div id="majorsContent" hx-target="#majorsContent" hx-swap="outerHTML">
 
+<h1>Daftar Jurusan</h1>
 <h2>Tambah Jurusan</h2>
-<form action="{{ route('majors.store') }}" method="POST">
+<form hx-post="{{ route('majors.store') }}" hx-target="#majorsContent" hx-swap="outerHTML">
     @csrf
     <label for="kode_jurusan">Kode:</label>
     <input type="text" name="kode_jurusan" required>
@@ -14,6 +15,9 @@
     <button type="submit">Tambah</button>
 </form>
 
+@if(isset($success))
+    <p style="color: green;">{{ $success }}</p>
+@endif
 @if(session('success'))
     <p style="color: green;">{{ session('success') }}</p>
 @endif
@@ -42,17 +46,19 @@
                 <td>
                     <a href="{{ route('majors.show', $major->kode_jurusan) }}">Lihat</a> |
                     <button onclick="toggleEdit('{{ $major->kode_jurusan }}')">Edit</button> |
-                    <form action="{{ route('majors.destroy', $major->kode_jurusan) }}" method="POST">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit">Hapus</button>
-                    </form>
+<form hx-delete="{{ route('majors.destroy', $major->kode_jurusan) }}" hx-confirm="Are you sure?" hx-target="#majorsContent" hx-swap="outerHTML">
+    @csrf
+    @method('DELETE')
+    <button type="submit">Hapus</button>
+</form>
+
                 </td>
             </tr>
         @endforeach
     </tbody>
 </table>
 
+</div>
 <script>
     function toggleEdit(kodeJurusan) {
         const spanElement = document.getElementById(`nama_${kodeJurusan}`);

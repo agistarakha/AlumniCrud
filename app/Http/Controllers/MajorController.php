@@ -35,7 +35,10 @@ class MajorController extends Controller
             'jurusan' => $request->jurusan,
         ]);
 
-        return redirect()->route('majors.index')->with('success', 'Jurusan berhasil ditambahkan.');
+        $majors = Major::all();
+        $success = 'Jurusan berhasil ditambahkan.';
+        return view('pages.majors.index', compact('majors', 'success'));
+        // return redirect()->route('majors.index')->with('success', 'Jurusan berhasil ditambahkan.');
     }
 
 
@@ -65,6 +68,9 @@ class MajorController extends Controller
     {
         //
         Major::findOrFail($kode_jurusan)->delete();
-        return redirect()->route('majors.index')->with('success', 'Jurusan berhasil dihapus.');
+        $majors = Major::all();
+        $success = 'Jurusan berhasil dihapus.';
+        return view('pages.majors.index', compact('majors', 'success'));
+        // return redirect()->route('majors.index')->with('success', 'Jurusan berhasil dihapus.');
     }
 }
